@@ -9,7 +9,7 @@ We use IRIS, ZPM Package manager and docker.
 
  * [Mirroring knowledge](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GHA_mirror).  
  * WRC Access.  
- * tls-ssl-webgateway image (see repo [tls-ssl-webgateway](https://github.com/lscalese/tls-ssl-webgateway) to build this simage)
+ * tls-ssl-webgateway image (see repo [tls-ssl-webgateway](https://github.com/lscalese/tls-ssl-webgateway) to build this image)
 
 ## Prepare your system
 
