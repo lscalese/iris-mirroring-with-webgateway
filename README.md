@@ -9,6 +9,7 @@ We use IRIS, ZPM Package manager and docker.
 
  * [Mirroring knowledge](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GHA_mirror).  
  * WRC Access.  
+ * tls-ssl-webgateway image (see repo [tls-ssl-webgateway](https://github.com/lscalese/tls-ssl-webgateway) to build this simage)
 
 ## Prepare your system
 
@@ -41,6 +42,16 @@ If you don't remember your password for the docker login to ICR, open this page 
 
 ```bash
 docker login -u="YourWRCLogin" -p="YourPassWord" containers.intersystems.com
+```
+
+### Generate certificates
+
+If you don't have your own certificates, use this script to generate all needed certificate files : 
+
+```
+cd ./generator
+sudo ./gen-certificates.sh
+cd ..
 ```
 
 ### Build and run containers
@@ -107,13 +118,15 @@ Master : http://localhost:81/csp/sys/utilhome.csp
 Failover backup member : http://localhost:82/csp/sys/utilhome.csp  
 Read-Write report async member : http://localhost:83/csp/sys/utilhome.csp  
 
+Access to the primary node throughout WebGateway : https://localhost/csp/sys/utilhome.csp
 
 # Troubleshoot
 
 ## Certificate contains the same serial number as another certificate
 
-With firefox It could happen when we generate new Authority Certificate
+With firefox It could happen when we generate new Authority Certificate.  
 
-Delete cert9.db file and restart : 
-~/.mozilla/firefox/xktesjjl.default-release/cert9.db
+Delete cert9.db file : ~/.mozilla/firefox/xktesjjl.default-release/cert9.db
+
+Restart firefox and retry.  
 
