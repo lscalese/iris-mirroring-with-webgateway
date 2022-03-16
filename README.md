@@ -46,7 +46,7 @@ docker login -u="YourWRCLogin" -p="YourPassWord" containers.intersystems.com
 ### Build and run containers
 
 ```
-docker-compose build --no-cache
+sudo docker-compose build --no-cache
 docker-compose up
 ```
 
@@ -106,3 +106,14 @@ W ^demo.test
 Master : http://localhost:81/csp/sys/utilhome.csp  
 Failover backup member : http://localhost:82/csp/sys/utilhome.csp  
 Read-Write report async member : http://localhost:83/csp/sys/utilhome.csp  
+
+
+# Troubleshoot
+
+## Certificate contains the same serial number as another certificate
+
+With firefox It could happen when we generate new Authority Certificate
+
+Delete cert9.db file and restart : 
+~/.mozilla/firefox/xktesjjl.default-release/cert9.db
+

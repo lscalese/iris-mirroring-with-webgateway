@@ -13,6 +13,9 @@
     "Security.Services" : {
         "%Service_Mirror" : {
             "Enabled" : true
+        },
+        "%Service_WebGateway": {
+            "ClientSystems": "172.16.238.50;127.0.0.1;172.16.238.20"
         }
     },
     "SYS.MirrorMaster" : {
@@ -32,12 +35,25 @@
                 "MirrorDBName" : "${DBName}"
             }],
             "SSLInfo" : {
-                "CAFile" : "/usr/irissys/mgr/CAServer/CA_Server.cer",
-                "CertificateFile" : "/usr/irissys/mgr/master_client.cer",
-                "PrivateKeyFile" : "/usr/irissys/mgr/master_client.key",
+                "CAFile" : "/certificates/CA_Server.cer",
+                "CertificateFile" : "/certificates/master_server.cer",
+                "PrivateKeyFile" : "/certificates/master_server.key",
                 "PrivateKeyPassword" : "",
                 "PrivateKeyType" : "2"
             }
         }
+    },
+    "Security.SSLConfigs": {
+        "%SuperServer": {
+            "CAFile": "/certificates/CA_Server.cer",
+            "CertificateFile": "/certificates/master_server.cer",
+            "Name": "%SuperServer",
+            "PrivateKeyFile": "/certificates/master_server.key",
+            "Type": "1",
+            "VerifyPeer": 3
+        }
+    },
+    "Security.System": {
+        "SSLSuperServer":1
     }
 }

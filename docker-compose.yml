@@ -33,12 +33,14 @@ services:
     volumes: 
       - ./backup:/opt/backup
       - ./init_mirror.sh:/init_mirror.sh
+      - ./volume-iris:/certificates
     hostname: master
     extra_hosts:
       - "backup:172.16.238.30"
       - "report:172.16.238.40"
     cap_add:
       - NET_ADMIN
+    command: ["-a", "/init_mirror.sh"]
 
   backup:
     image: mirror-demo
@@ -55,12 +57,14 @@ services:
     volumes: 
       - ./backup:/opt/backup
       - ./init_mirror.sh:/init_mirror.sh
+      - ./volume-iris:/certificates
     hostname: backup
     extra_hosts:
       - "master:172.16.238.20"
       - "report:172.16.238.40"
     cap_add:
       - NET_ADMIN
+    command: ["-a", "/init_mirror.sh"]
 
   report:
     image: mirror-demo
@@ -77,12 +81,45 @@ services:
     volumes: 
       - ./backup:/opt/backup
       - ./init_mirror.sh:/init_mirror.sh
+      - ./volume-iris:/certificates
     hostname: report
     extra_hosts:
       - "master:172.16.238.20"
       - "report:172.16.238.40"
     cap_add:
       - NET_ADMIN
+    command: ["-a", "/init_mirror.sh"]
+  
+  webgateway:
+    image: tls-ssl-webgateway
+    container_name: mirror-demo-webgateway
+    networks:
+      app_net:
+        ipv4_address: 172.16.238.50
+    ports:
+      # change the local port already used on your system. 
+      - "80:80"
+      - "443:443"
+    environment:
+      # IRIS_HOST is setting up with the virtual ip in order to point always on the primary node
+      - IRIS_HOST=172.16.238.100
+      - IRIS_PORT=1972
+      # Replace by the list of ip address allowed to open the CSP system manager
+      # https://localhost/csp/bin/RunTime/Module.cxw
+      - "SYSTEM_MANAGER=*.*.*.*"
+      # the list of web apps
+      # /csp allow to the webgateway to redirect all request starting by /csp to the iris instance
+      # You can specify a list separate by a space : "IRIS_WEBAPPS=/csp /api /isc /swagger-ui"
+      - "IRIS_WEBAPPS=/csp"
+    volumes:
+      # Mount certificates files.
+      - ./volume-apache/webgateway_client.cer:/opt/webgateway/bin/webgateway_client.cer
+      - ./volume-apache/webgateway_client.key:/opt/webgateway/bin/webgateway_client.key
+      - ./volume-apache/CA_Server.cer:/opt/webgateway/bin/CA_Server.cer
+      - ./volume-apache/apache_webgateway.cer:/etc/apache2/certificate/apache_webgateway.cer
+      - ./volume-apache/apache_webgateway.key:/etc/apache2/certificate/apache_webgateway.key
+    hostname: webgateway
+    command: ["--ssl"]
   
 networks:
   app_net:

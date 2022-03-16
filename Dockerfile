@@ -35,10 +35,6 @@ SHELL [ "/session.sh" ]
 RUN \
 Do $SYSTEM.OBJ.Load("/opt/demo/zpm.xml", "ck") \
 zpm "install config-api" \
-zpm "install pki-script" \
 Set sc = ##class(Api.Config.Services.Loader).Load("/opt/demo/simple-config.json")
 
 COPY init_mirror.sh /
-
-# Execute a post start script to configure mirroring.
-CMD ["-a", "/init_mirror.sh"]
