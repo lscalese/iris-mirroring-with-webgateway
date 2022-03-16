@@ -1,0 +1,43 @@
+{
+    "Defaults":{
+        "MirrorName" : "Demo",
+        "ArbiterNode" : "172.16.238.10|2188",
+        "VirtualAddress" : "172.16.238.100/24",
+        "VirtualAddressInterface" : "eth0",
+        "MirrorAddress" : "172.16.220.20",
+        "AgentAddress" : "172.16.238.20",
+        "SystemName" : "master",
+        "DBDir" : "${MGRDIR}myappdata/",
+        "DBName" : "MYAPPDATA"
+    },
+    "Security.Services" : {
+        "%Service_Mirror" : {
+            "Enabled" : true
+        }
+    },
+    "SYS.MirrorMaster" : {
+        "${MirrorName}" : {
+            "Config" : {
+                "Name" : "${MirrorName}",
+                "SystemName" : "${SystemName}",
+                "UseSSL" : true,
+                "ArbiterNode" : "${ArbiterNode}",
+                "VirtualAddress" : "${VirtualAddress}",
+                "VirtualAddressInterface" : "${VirtualAddressInterface}",
+                "MirrorAddress": "${MirrorAddress}",
+                "AgentAddress": "${AgentAddress}"
+            },
+            "Databases" : [{
+                "Directory" : "${DBDir}",
+                "MirrorDBName" : "${DBName}"
+            }],
+            "SSLInfo" : {
+                "CAFile" : "/usr/irissys/mgr/CAServer/CA_Server.cer",
+                "CertificateFile" : "/usr/irissys/mgr/master_client.cer",
+                "PrivateKeyFile" : "/usr/irissys/mgr/master_client.key",
+                "PrivateKeyPassword" : "",
+                "PrivateKeyType" : "2"
+            }
+        }
+    }
+}

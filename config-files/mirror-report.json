@@ -1,0 +1,43 @@
+{
+    "Defaults":{
+        "MirrorName" : "Demo",
+        "AgentAddress" : "172.16.238.20",
+        "SystemName" : "report",
+        "PrimaryInstanceName" : "IRIS",
+        "VirtualAddressInterface" : "eth0",
+        "DBDir" : "${MGRDIR}myappdata/",
+        "MirrorAddress" : "172.16.220.40"
+    },
+    "Security.Services" : {
+        "%Service_Mirror" : {
+            "Enabled" : true
+        }
+    },
+    "SYS.MirrorFailOver" : {
+        "${MirrorName}" : {
+            "Config": {
+                "Name" : "${MirrorName}",
+                "SystemName" : "${SystemName}",
+                "InstanceName" : "${PrimaryInstanceName}",
+                "AgentAddress" : "${AgentAddress}",
+                "AgentPort" : "2188",
+                "AsyncMember" : true,
+                "AsyncMemberType" : "rw"
+            },
+            "Databases" : [{
+                 "Directory" : "${DBDir}"
+            }],
+            "LocalInfo" : {
+                "VirtualAddressInterface" : "${VirtualAddressInterface}",
+                "MirrorAddress": "${MirrorAddress}"
+            },
+            "SSLInfo" : {
+                "CAFile" : "/usr/irissys/mgr/CA_Server.cer",
+                "CertificateFile" : "/usr/irissys/mgr/report_client.cer",
+                "PrivateKeyFile" : "/usr/irissys/mgr/report_client.key",
+                "PrivateKeyPassword" : "",
+                "PrivateKeyType" : "2"
+            }
+        }
+    }
+}
