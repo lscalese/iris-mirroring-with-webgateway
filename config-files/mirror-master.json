@@ -1,38 +1,27 @@
 {
-    "Defaults":{
-        "MirrorName" : "Demo",
-        "ArbiterNode" : "172.16.238.10|2188",
-        "VirtualAddress" : "172.16.238.100/24",
-        "VirtualAddressInterface" : "eth0",
-        "MirrorAddress" : "172.16.220.20",
-        "AgentAddress" : "172.16.238.20",
-        "SystemName" : "master",
-        "DBDir" : "${MGRDIR}myappdata/",
-        "DBName" : "MYAPPDATA"
-    },
     "Security.Services" : {
         "%Service_Mirror" : {
             "Enabled" : true
         },
         "%Service_WebGateway": {
-            "ClientSystems": "172.16.238.50;127.0.0.1;172.16.238.20"
+            "ClientSystems": "${WEBGATEWAY_IP};127.0.0.1;${MASTER_APP_NET_IP}"
         }
     },
     "SYS.MirrorMaster" : {
-        "${MirrorName}" : {
+        "Demo" : {
             "Config" : {
-                "Name" : "${MirrorName}",
-                "SystemName" : "${SystemName}",
+                "Name" : "Demo",
+                "SystemName" : "master",
                 "UseSSL" : true,
-                "ArbiterNode" : "${ArbiterNode}",
-                "VirtualAddress" : "${VirtualAddress}",
-                "VirtualAddressInterface" : "${VirtualAddressInterface}",
-                "MirrorAddress": "${MirrorAddress}",
-                "AgentAddress": "${AgentAddress}"
+                "ArbiterNode" : "${ARBITER_IP}|2188",
+                "VirtualAddress" : "${IRIS_VIRTUAL_IP}/24",
+                "VirtualAddressInterface" : "eth0",
+                "MirrorAddress": "${MASTER_MIRROR_NET_IP}",
+                "AgentAddress": "${MASTER_APP_NET_IP}"
             },
             "Databases" : [{
-                "Directory" : "${DBDir}",
-                "MirrorDBName" : "${DBName}"
+                "Directory" : "/usr/irissys/mgr/myappdata/",
+                "MirrorDBName" : "MYAPPDATA"
             }],
             "SSLInfo" : {
                 "CAFile" : "/certificates/CA_Server.cer",

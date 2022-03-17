@@ -10,11 +10,12 @@ COPY session.sh /
 COPY iris.key /usr/irissys/mgr/iris.key
 
 # Install iputils-arping to have arping command.  It's required to configure Virtual IP.
+# Install gettext-base to have envsubst tool
 # Download the latest ZPM version...
 RUN mkdir /opt/demo && \
     chown ${ISC_PACKAGE_MGRUSER}:${ISC_PACKAGE_IRISGROUP} /opt/demo && \
     chmod 666 /usr/irissys/mgr/iris.key && \
-    apt-get update && apt-get install iputils-arping && \
+    apt-get update && apt-get install iputils-arping gettext-base && \
     wget -O /opt/demo/zpm.xml https://pm.community.intersystems.com/packages/zpm/latest/installer
 
 USER ${ISC_PACKAGE_MGRUSER}

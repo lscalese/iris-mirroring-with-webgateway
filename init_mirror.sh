@@ -32,8 +32,9 @@ PKISERVER=master:52773
 # Start a Job to auto-accept other members named "backup" and "report" to join the mirror (avoid manuel validation in portal management).
 master() {
 rm -rf $BACKUP_FOLDER/IRIS.DAT
+envsubst < ${MASTER_CONFIG} > ${MASTER_CONFIG}.resolved
 iris session $ISC_PACKAGE_INSTANCENAME -U %SYS <<- END
-Set sc = ##class(Api.Config.Services.Loader).Load("${MASTER_CONFIG}")
+Set sc = ##class(Api.Config.Services.Loader).Load("${MASTER_CONFIG}.resolved")
 Set ^log.mirrorconfig(\$i(^log.mirrorconfig)) = \$SYSTEM.Status.GetOneErrorText(sc)
 Job ##class(Api.Config.Services.SYS.MirrorMaster).AuthorizeNewMembers("${MIRROR_MEMBERS}","${MIRROR_NAME}",600)
 Hang 2
@@ -68,8 +69,9 @@ iris session $ISC_PACKAGE_INSTANCENAME -U %SYS "##class(SYS.Database).MountDatab
 #    /opt/demo/mirror-report.json if this instance the report (async R\W mirror node).
 other_node() {
 sleep 5
+envsubst < $1 > $1.resolved
 iris session $ISC_PACKAGE_INSTANCENAME -U %SYS <<- END
-Set sc = ##class(Api.Config.Services.Loader).Load("$1")
+Set sc = ##class(Api.Config.Services.Loader).Load("$1.resolved")
 Halt
 END
 }

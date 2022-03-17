@@ -1,38 +1,29 @@
 {
-    "Defaults":{
-        "MirrorName" : "Demo",
-        "AgentAddress" : "172.16.238.20",
-        "SystemName" : "report",
-        "PrimaryInstanceName" : "IRIS",
-        "VirtualAddressInterface" : "eth0",
-        "DBDir" : "${MGRDIR}myappdata/",
-        "MirrorAddress" : "172.16.220.40"
-    },
     "Security.Services" : {
         "%Service_Mirror" : {
             "Enabled" : true
         },
         "%Service_WebGateway": {
-            "ClientSystems": "172.16.238.50;127.0.0.1;172.16.238.40"
+            "ClientSystems": "${WEBGATEWAY_IP};127.0.0.1;${REPORT_APP_NET_IP}"
         }
     },
     "SYS.MirrorFailOver" : {
-        "${MirrorName}" : {
+        "Demo" : {
             "Config": {
-                "Name" : "${MirrorName}",
-                "SystemName" : "${SystemName}",
-                "InstanceName" : "${PrimaryInstanceName}",
-                "AgentAddress" : "${AgentAddress}",
+                "Name" : "Demo",
+                "SystemName" : "report",
+                "InstanceName" : "IRIS",
+                "AgentAddress" : "${MASTER_APP_NET_IP}",
                 "AgentPort" : "2188",
                 "AsyncMember" : true,
                 "AsyncMemberType" : "rw"
             },
             "Databases" : [{
-                 "Directory" : "${DBDir}"
+                 "Directory" : "/usr/irissys/mgr/myappdata/"
             }],
             "LocalInfo" : {
-                "VirtualAddressInterface" : "${VirtualAddressInterface}",
-                "MirrorAddress": "${MirrorAddress}"
+                "VirtualAddressInterface" : "eth0",
+                "MirrorAddress": "${REPORT_MIRROR_NET_IP}"
             },
             "SSLInfo" : {
                 "CAFile" : "/certificates/CA_Server.cer",

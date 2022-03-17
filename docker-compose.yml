@@ -1,3 +1,7 @@
+# Variables are defined in .env file
+# to show the resolved docker-compose file, execute 
+# docker-compose config
+
 version: '3.7'
 
 services:
@@ -9,11 +13,11 @@ services:
       - /usr/local/etc/irissys/startISCAgent.sh 2188
     networks:
       app_net:
-        ipv4_address: 172.16.238.10
+        ipv4_address: ${ARBITER_IP}
     extra_hosts:
-      - "master:172.16.238.20"
-      - "backup:172.16.238.30"
-      - "report:172.16.238.40"
+      - "master:${MASTER_APP_NET_IP}"
+      - "backup:${BACKUP_APP_NET_IP}"
+      - "report:${REPORT_APP_NET_IP}"
     cap_add:
       - NET_ADMIN
 
@@ -23,21 +27,27 @@ services:
     container_name: mirror-demo-master
     networks:
       app_net:
-        ipv4_address: 172.16.238.20
+        ipv4_address: ${MASTER_APP_NET_IP}
       mirror_net:
-        ipv4_address: 172.16.220.20
+        ipv4_address: ${MASTER_MIRROR_NET_IP}
     environment: 
       - IRIS_MIRROR_ROLE=master
+      - WEBGATEWAY_IP=${WEBGATEWAY_IP}
+      - MASTER_APP_NET_IP=${MASTER_APP_NET_IP}
+      - MASTER_MIRROR_NET_IP=${MASTER_MIRROR_NET_IP}
+      - ARBITER_IP=${ARBITER_IP}
+      - IRIS_VIRTUAL_IP=${IRIS_VIRTUAL_IP}
     ports:
       - 81:52773
     volumes: 
       - ./backup:/opt/backup
       - ./init_mirror.sh:/init_mirror.sh
       - ./volume-iris:/certificates
+      #- ~/iris.key:/usr/irissys/mgr/iris.key
     hostname: master
     extra_hosts:
-      - "backup:172.16.238.30"
-      - "report:172.16.238.40"
+      - "backup:${BACKUP_APP_NET_IP}"
+      - "report:${REPORT_APP_NET_IP}"
     cap_add:
       - NET_ADMIN
     command: ["-a", "/init_mirror.sh"]
@@ -47,21 +57,26 @@ services:
     container_name: mirror-demo-backup
     networks:
       app_net:
-        ipv4_address: 172.16.238.30
+        ipv4_address: ${BACKUP_APP_NET_IP}
       mirror_net:
-        ipv4_address: 172.16.220.30
+        ipv4_address: ${BACKUP_MIRROR_NET_IP}
     ports:
       - 82:52773
     environment: 
       - IRIS_MIRROR_ROLE=backup
+      - WEBGATEWAY_IP=${WEBGATEWAY_IP}
+      - BACKUP_MIRROR_NET_IP=${BACKUP_MIRROR_NET_IP}
+      - MASTER_APP_NET_IP=${MASTER_APP_NET_IP}
+      - BACKUP_APP_NET_IP=${BACKUP_APP_NET_IP}
     volumes: 
       - ./backup:/opt/backup
       - ./init_mirror.sh:/init_mirror.sh
       - ./volume-iris:/certificates
+      #- ~/iris.key:/usr/irissys/mgr/iris.key
     hostname: backup
     extra_hosts:
-      - "master:172.16.238.20"
-      - "report:172.16.238.40"
+      - "master:${MASTER_APP_NET_IP}"
+      - "report:${REPORT_APP_NET_IP}"
     cap_add:
       - NET_ADMIN
     command: ["-a", "/init_mirror.sh"]
@@ -71,21 +86,26 @@ services:
     container_name: mirror-demo-report
     networks:
       app_net:
-        ipv4_address: 172.16.238.40
+        ipv4_address: ${REPORT_APP_NET_IP}
       mirror_net:
-        ipv4_address: 172.16.220.40
+        ipv4_address: ${REPORT_MIRROR_NET_IP}
     ports:
       - 83:52773
     environment: 
       - IRIS_MIRROR_ROLE=report
+      - WEBGATEWAY_IP=${WEBGATEWAY_IP}
+      - MASTER_APP_NET_IP=${MASTER_APP_NET_IP}
+      - REPORT_MIRROR_NET_IP=${REPORT_MIRROR_NET_IP}
+      - REPORT_APP_NET_IP=${REPORT_APP_NET_IP}
     volumes: 
       - ./backup:/opt/backup
       - ./init_mirror.sh:/init_mirror.sh
       - ./volume-iris:/certificates
+      #- ~/iris.key:/usr/irissys/mgr/iris.key
     hostname: report
     extra_hosts:
-      - "master:172.16.238.20"
-      - "report:172.16.238.40"
+      - "master:${MASTER_APP_NET_IP}"
+      - "backup:${BACKUP_APP_NET_IP}"
     cap_add:
       - NET_ADMIN
     command: ["-a", "/init_mirror.sh"]
@@ -95,15 +115,15 @@ services:
     container_name: mirror-demo-webgateway
     networks:
       app_net:
-        ipv4_address: 172.16.238.50
+        ipv4_address: ${WEBGATEWAY_IP}
     ports:
       # change the local port already used on your system. 
       - "80:80"
       - "443:443"
     environment:
       # IRIS_HOST is setting up with the virtual ip in order to point always on the primary node
-      - IRIS_HOST=172.16.238.100
-      - IRIS_PORT=1972
+      - IRIS_HOST=${IRIS_HOST}
+      - IRIS_PORT=${IRIS_PORT}
       # Replace by the list of ip address allowed to open the CSP system manager
       # https://localhost/csp/bin/RunTime/Module.cxw
       - "SYSTEM_MANAGER=*.*.*.*"
@@ -113,11 +133,16 @@ services:
       - "IRIS_WEBAPPS=/csp"
     volumes:
       # Mount certificates files.
-      - ./volume-apache/webgateway_client.cer:/opt/webgateway/bin/webgateway_client.cer
-      - ./volume-apache/webgateway_client.key:/opt/webgateway/bin/webgateway_client.key
-      - ./volume-apache/CA_Server.cer:/opt/webgateway/bin/CA_Server.cer
-      - ./volume-apache/apache_webgateway.cer:/etc/apache2/certificate/apache_webgateway.cer
-      - ./volume-apache/apache_webgateway.key:/etc/apache2/certificate/apache_webgateway.key
+      #- ./volume-apache/webgateway_client.cer:/opt/webgateway/bin/webgateway_client.cer
+      #- ./volume-apache/webgateway_client.key:/opt/webgateway/bin/webgateway_client.key
+      #- ./volume-apache/CA_Server.cer:/opt/webgateway/bin/CA_Server.cer
+      #- ./volume-apache/apache_webgateway.cer:/etc/apache2/certificate/apache_webgateway.cer
+      #- ./volume-apache/apache_webgateway.key:/etc/apache2/certificate/apache_webgateway.key
+      - ~/webgateway-apache-certificates/webgateway_client.cer:/opt/webgateway/bin/webgateway_client.cer
+      - ~/webgateway-apache-certificates/webgateway_client.key:/opt/webgateway/bin/webgateway_client.key
+      - ~/webgateway-apache-certificates/CA_Server.cer:/opt/webgateway/bin/CA_Server.cer
+      - ~/webgateway-apache-certificates/apache_webgateway.cer:/etc/apache2/certificate/apache_webgateway.cer
+      - ~/webgateway-apache-certificates/apache_webgateway.key:/etc/apache2/certificate/apache_webgateway.key
     hostname: webgateway
     command: ["--ssl"]
   
@@ -126,9 +151,9 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: "172.16.238.0/24"
+        - subnet: "${APP_NET_SUBNET}"
   mirror_net:
     ipam:
       driver: default
       config:
-        - subnet: "172.16.220.0/24"
+        - subnet: "${MIRROR_NET_SUBNET}"

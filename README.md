@@ -4,6 +4,10 @@ In this repository we can find a sample to create mirroring fully scripted witho
 
 We use IRIS, ZPM Package manager and docker.  
 
+This sample includes : arbiter, 2 failover members, 1 report asynch node, webgateway, https, ssl\tls configuration.  
+
+![overview](./network-schema-01.png)
+
 
 ## Prerequisites
 
@@ -51,6 +55,9 @@ If you don't have your own certificates, use this script to generate all needed 
 ```
 cd ./generator
 sudo ./gen-certificates.sh
+# copy apache certificates outside the repository without override
+sudo cp -prn ./volume-apache ~/webgateway-apache-certificates
+sudo rm -vfr ./volume-apache
 cd ..
 ```
 
@@ -118,7 +125,9 @@ Master : http://localhost:81/csp/sys/utilhome.csp
 Failover backup member : http://localhost:82/csp/sys/utilhome.csp  
 Read-Write report async member : http://localhost:83/csp/sys/utilhome.csp  
 
-Access to the primary node throughout WebGateway : https://localhost/csp/sys/utilhome.csp
+Access to the primary node throughout WebGateway : https://localhost/csp/sys/utilhome.csp  
+Access to the WebGateway management : https://localhost/csp/bin/Systems/Module.cxw  
+
 
 # Troubleshoot
 
