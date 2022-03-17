@@ -1,4 +1,4 @@
-# IRIS Mirroring samples
+# IRIS Mirroring sample
 
 In this repository we can find a sample to create mirroring fully scripted without manual intervention.  
 
