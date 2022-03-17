@@ -13,7 +13,6 @@ chmod 777 ${DIRTMPCERT}/
 docker run \
  --entrypoint /external/irisrun.sh \
  --name cert_generator \
- --publish 1972:1972 --publish 52773:52773 \
  --volume $(pwd):/external \
  intersystemsdc/iris-community:latest
 
