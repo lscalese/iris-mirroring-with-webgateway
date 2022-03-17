@@ -56,8 +56,8 @@ If you don't have your own certificates, use this script to generate all needed 
 cd ./generator
 sudo ./gen-certificates.sh
 # copy apache certificates outside the repository without override
-sudo cp -prn ./volume-apache ~/webgateway-apache-certificates
-sudo rm -vfr ./volume-apache
+sudo cp -prn ../volume-apache ~/webgateway-apache-certificates
+sudo rm -vfr ../volume-apache
 cd ..
 ```
 
