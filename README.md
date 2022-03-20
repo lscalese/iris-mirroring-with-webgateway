@@ -54,7 +54,12 @@ If you don't have your own certificates, use this script to generate all needed 
 
 ```
 cd ./generator
+# sudo is needed due chown, chgrp, chmod ...
 sudo ./gen-certificates.sh
+# move certificate for apache webserver to the home directory.  
+mkdir -vp ~/webgateway-apache-certificates
+mv -vn ./certificates/apache_webgateway.cer ~/webgateway-apache-certificates/apache_webgateway.cer
+mv -vn ./certificates/apache_webgateway.key ~/webgateway-apache-certificates/apache_webgateway.key
 cd ..
 ```
 
