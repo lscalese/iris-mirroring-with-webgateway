@@ -1,14 +1,10 @@
 #!/bin/bash
 
-DIRTMPCERT=./certificates
-VOLAPACHE=../volume-apache
-VOLIRIS=../volume-iris
-
 # clean previous execution.
-rm -vfr ${DIRTMPCERT} ${VOLIRIS} ${VOLAPACHE}
+rm -vfr ./certificates ../certificates
 
-mkdir ${DIRTMPCERT} ${VOLIRIS} ${VOLAPACHE}
-chmod 777 ${DIRTMPCERT}/
+mkdir -v ./certificates
+chmod 777 ./certificates
 
 docker run \
  --entrypoint /external/irisrun.sh \
@@ -19,35 +15,32 @@ docker run \
 docker container rm cert_generator
 
 # chmod to avoid a permission denied for the copy
-chmod 777 ${DIRTMPCERT}/*
-
-cp ${DIRTMPCERT}/CA_Server.cer ${VOLIRIS}/CA_Server.cer
-cp ${DIRTMPCERT}/CA_Server.cer ${VOLAPACHE}/CA_Server.cer
-
-cp ${DIRTMPCERT}/master_server.* ${VOLIRIS}/
-cp ${DIRTMPCERT}/backup_server.* ${VOLIRIS}/
-cp ${DIRTMPCERT}/report_server.* ${VOLIRIS}/
-
-cp ${DIRTMPCERT}/apache_webgateway.cer ${VOLAPACHE}/apache_webgateway.cer
-cp ${DIRTMPCERT}/apache_webgateway.key ${VOLAPACHE}/apache_webgateway.key
-cp ${DIRTMPCERT}/webgateway_client.cer ${VOLAPACHE}/webgateway_client.cer
-cp ${DIRTMPCERT}/webgateway_client.key ${VOLAPACHE}/webgateway_client.key
+# chmod 777 ${DIRTMPCERT}/*
 
 # change permissions
 
-chown irisowner ${VOLIRIS}/*
-chgrp irisowner ${VOLIRIS}/*
-chmod 640 ${VOLIRIS}/*.cer
+chown irisowner ./certificates/*_server.cer ./certificates/*_server.key
+chgrp irisowner ./certificates/*_server.cer ./certificates/*_server.key
+chmod 644 ./certificates/*_server.cer
 
 # chmod for private key should be 600, but we have permissions denied with IRIS
 # Maybe irisowner is not the good owner for these files ... to analyse...
-chmod 644 ${VOLIRIS}/*.key
+chmod 640 ./certificates/*.key
+chgrp irisuser ./certificates/*_server.key
 
-chown www-data ${VOLAPACHE}/*.key
-chgrp www-data ${VOLAPACHE}/*.key
-chmod 600 ${VOLAPACHE}/*.key
-chown root ${VOLAPACHE}/*.cer
-chgrp root ${VOLAPACHE}/*.cer
-chmod 644 ${VOLAPACHE}/*.cer
+chown www-data ./certificates/apache_webgateway.cer
+chgrp www-data ./certificates/apache_webgateway.key
+chmod 644 ./certificates/apache_*.cer
+chmod 600 ./certificates/apache_webgateway.key
 
-rm -vfr ${DIRTMPCERT}
+chown root ./certificates/webgateway_client.cer ./certificates/webgateway_client.key
+chgrp www-data ./certificates/webgateway_client.cer ./certificates/webgateway_client.key
+chmod 640 ./certificates/webgateway_*.cer 
+
+rm -vfr ../certificates
+mkdir -vp ~/webgateway-apache-certificates/
+mv -vn ./certificates/apache_webgateway.cer ~/webgateway-apache-certificates/apache_webgateway.cer
+mv -vn ./certificates/apache_webgateway.key ~/webgateway-apache-certificates/apache_webgateway.key
+
+mv -v ./certificates ../certificates
+

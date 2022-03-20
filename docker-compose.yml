@@ -42,7 +42,10 @@ services:
     volumes: 
       - ./backup:/opt/backup
       - ./init_mirror.sh:/init_mirror.sh
-      - ./volume-iris:/certificates
+      # Mount certificates
+      - ./certificates/master_server.cer:/certificates/master_server.cer
+      - ./certificates/master_server.key:/certificates/master_server.key
+      - ./certificates/CA_Server.cer:/certificates/CA_Server.cer
       #- ~/iris.key:/usr/irissys/mgr/iris.key
     hostname: master
     extra_hosts:
@@ -72,6 +75,10 @@ services:
       - ./backup:/opt/backup
       - ./init_mirror.sh:/init_mirror.sh
       - ./volume-iris:/certificates
+      # Mount certificates
+      - ./certificates/backup_server.cer:/certificates/backup_server.cer
+      - ./certificates/backup_server.key:/certificates/backup_server.key
+      - ./certificates/CA_Server.cer:/certificates/CA_Server.cer
       #- ~/iris.key:/usr/irissys/mgr/iris.key
     hostname: backup
     extra_hosts:
@@ -101,6 +108,10 @@ services:
       - ./backup:/opt/backup
       - ./init_mirror.sh:/init_mirror.sh
       - ./volume-iris:/certificates
+      # Mount certificates
+      - ./certificates/report_server.cer:/certificates/report_server.cer
+      - ./certificates/report_server.key:/certificates/report_server.key
+      - ./certificates/CA_Server.cer:/certificates/CA_Server.cer
       #- ~/iris.key:/usr/irissys/mgr/iris.key
     hostname: report
     extra_hosts:
@@ -133,14 +144,9 @@ services:
       - "IRIS_WEBAPPS=/csp"
     volumes:
       # Mount certificates files.
-      #- ./volume-apache/webgateway_client.cer:/opt/webgateway/bin/webgateway_client.cer
-      #- ./volume-apache/webgateway_client.key:/opt/webgateway/bin/webgateway_client.key
-      #- ./volume-apache/CA_Server.cer:/opt/webgateway/bin/CA_Server.cer
-      #- ./volume-apache/apache_webgateway.cer:/etc/apache2/certificate/apache_webgateway.cer
-      #- ./volume-apache/apache_webgateway.key:/etc/apache2/certificate/apache_webgateway.key
-      - ~/webgateway-apache-certificates/webgateway_client.cer:/opt/webgateway/bin/webgateway_client.cer
-      - ~/webgateway-apache-certificates/webgateway_client.key:/opt/webgateway/bin/webgateway_client.key
-      - ~/webgateway-apache-certificates/CA_Server.cer:/opt/webgateway/bin/CA_Server.cer
+      - ./certificates/webgateway_client.cer:/opt/webgateway/bin/webgateway_client.cer
+      - ./certificates/webgateway_client.key:/opt/webgateway/bin/webgateway_client.key
+      - ./certificates/CA_Server.cer:/opt/webgateway/bin/CA_Server.cer
       - ~/webgateway-apache-certificates/apache_webgateway.cer:/etc/apache2/certificate/apache_webgateway.cer
       - ~/webgateway-apache-certificates/apache_webgateway.key:/etc/apache2/certificate/apache_webgateway.key
     hostname: webgateway

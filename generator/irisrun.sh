@@ -41,10 +41,11 @@ END
 
 cp /usr/irissys/mgr/CA_Server.cer /external/certificates/CA_Server.cer
 
-cp /usr/irissys/mgr/webgateway_client.csr /external/certificates/webgateway_client.csr
+# cp /usr/irissys/mgr/webgateway_client.csr /external/certificates/webgateway_client.csr
 cp /usr/irissys/mgr/webgateway_client.cer /external/certificates/webgateway_client.cer
 cp /usr/irissys/mgr/webgateway_client.key /external/certificates/webgateway_client.key
 
+# cp /usr/irissys/mgr/apache_webgateway.cer /external/certificates/apache_webgateway.csr
 cp /usr/irissys/mgr/apache_webgateway.cer /external/certificates/apache_webgateway.cer
 cp /usr/irissys/mgr/apache_webgateway.key /external/certificates/apache_webgateway.key
 

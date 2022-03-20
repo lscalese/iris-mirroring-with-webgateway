@@ -6,7 +6,7 @@ We use IRIS, ZPM Package manager and docker.
 
 This sample includes : arbiter, 2 failover members, 1 report asynch node, webgateway, https, ssl\tls configuration.  
 
-![overview](./network-schema-01.png)
+![overview](./img/network-schema-01.png)
 
 
 ## Prerequisites
@@ -55,11 +55,12 @@ If you don't have your own certificates, use this script to generate all needed 
 ```
 cd ./generator
 sudo ./gen-certificates.sh
-# copy apache certificates outside the repository without override
-sudo cp -prn ../volume-apache ~/webgateway-apache-certificates
-sudo rm -vfr ../volume-apache
 cd ..
 ```
+
+Generated certficates will be in `./certificates` directory for IRIS instances and webgateway component.  
+The certificate and the private for apache webserver will be in your home directory `~/webgateway-apache-certificates`.  
+If files alread exist, they won't be overrided.  
 
 ### Build and run containers
 
