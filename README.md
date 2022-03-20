@@ -53,6 +53,7 @@ docker login -u="YourWRCLogin" -p="YourPassWord" containers.intersystems.com
 If you don't have your own certificates, use this script to generate all needed certificate files : 
 
 ```
+docker pull intersystemsdc/iris-community:latest
 cd ./generator
 # sudo is needed due chown, chgrp, chmod ...
 sudo ./gen-certificates.sh
