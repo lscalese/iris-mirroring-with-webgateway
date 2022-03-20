@@ -74,7 +74,6 @@ services:
     volumes: 
       - ./backup:/opt/backup
       - ./init_mirror.sh:/init_mirror.sh
-      - ./volume-iris:/certificates
       # Mount certificates
       - ./certificates/backup_server.cer:/certificates/backup_server.cer
       - ./certificates/backup_server.key:/certificates/backup_server.key
@@ -107,7 +106,6 @@ services:
     volumes: 
       - ./backup:/opt/backup
       - ./init_mirror.sh:/init_mirror.sh
-      - ./volume-iris:/certificates
       # Mount certificates
       - ./certificates/report_server.cer:/certificates/report_server.cer
       - ./certificates/report_server.key:/certificates/report_server.key
