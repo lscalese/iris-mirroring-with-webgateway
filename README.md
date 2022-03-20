@@ -67,6 +67,26 @@ Generated certficates will be in `./certificates` directory for IRIS instances a
 The certificate and the private for apache webserver will be in your home directory `~/webgateway-apache-certificates`.  
 If files alread exist, they won't be overrided.  
 
+Using a new generated a certificate for each try on the webserver could cause an error `Certificate contains the same serial number as another certificate`.  
+See troubleshoot section to fix it if you encounter this problem.  
+
+Certficates files overview : 
+
+| File | Container | Description |
+|--- |--- |--- |
+| ~/webgateway-apache-certificates/apache_webgateway.cer | webgateway | Certificate for apache webserver |
+| ~/webgateway-apache-certificates/apache_webgateway.key | webgateway | Related private key |
+| ./certificates/webgateway_client.cer | webgateway | Certificate to encrypt communication between webgateway and IRIS |
+| ./certificates/webgateway_client.key | webgateway | Related private key |
+| ./certificates/CA_Server.cer | webgateway,master,backup,report | Authority server certificate|
+| ./certificates/master_server.cer | master | Certificate for IRIS master instance (used for mirror and wegateway communication encryption) |
+| ./certificates/master_server.key | master | Related private key |
+| ./certificates/backup_server.cer | backup | Certificate for IRIS backup instance (used for mirror and wegateway communication encryption) |
+| ./certificates/backup_server.key | backup | Related private key |
+| ./certificates/report_server.cer | report | Certificate for IRIS report instance (used for mirror and wegateway communication encryption) |
+| ./certificates/report_server.key | report | Related private key |
+
+
 ### Build and run containers
 
 ```
