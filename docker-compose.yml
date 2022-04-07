@@ -135,11 +135,11 @@ services:
       - IRIS_PORT=${IRIS_PORT}
       # Replace by the list of ip address allowed to open the CSP system manager
       # https://localhost/csp/bin/RunTime/Module.cxw
-      - "SYSTEM_MANAGER=*.*.*.*"
+      - "SYSTEM_MANAGER=${LOCAL_IP}"
       # the list of web apps
       # /csp allow to the webgateway to redirect all request starting by /csp to the iris instance
       # You can specify a list separate by a space : "IRIS_WEBAPPS=/csp /api /isc /swagger-ui"
-      - "IRIS_WEBAPPS=/csp"
+      - "IRIS_WEBAPPS=/csp/sys"
     volumes:
       # Mount certificates files.
       - ./certificates/webgateway_client.cer:/opt/webgateway/bin/webgateway_client.cer
@@ -148,7 +148,7 @@ services:
       - ~/webgateway-apache-certificates/apache_webgateway.cer:/etc/apache2/certificate/apache_webgateway.cer
       - ~/webgateway-apache-certificates/apache_webgateway.key:/etc/apache2/certificate/apache_webgateway.key
     hostname: webgateway
-    command: ["--ssl"]
+    
   
 networks:
   app_net:
